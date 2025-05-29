@@ -33,19 +33,43 @@ export class AgendaService implements OnModuleInit {
 
     async scheduleBirthdayJob(user: UserDocument): Promise<void> {
         this.logger.log(`User birthday ${user.birthday}`)
-        const today = moment.tz(user.timezone);
-        const birthMonthDay = moment(user.birthday).format('MM-DD');
-
-        let nextBirthday = moment.tz(`${today.year()}-${birthMonthDay} 09:00`, 'YYYY-MM-DD HH:mm', user.timezone);
-
-        if (nextBirthday.isBefore(today)) {
-            nextBirthday = nextBirthday.add(1, 'year');
-        }
-        this.logger.log(`Scheduling birthday job for ${user.email} at ${nextBirthday.format()}`);
-        await this.agenda.schedule(nextBirthday.toDate(), 'birthday-job', {
+        const nextBirthday = this.calculateNextBirthDay(user.birthday, user.timezone)
+        this.logger.log(`Scheduling birthday job for ${user.email} at ${nextBirthday}`);
+        await this.agenda.schedule(nextBirthday, 'birthday-job', {
             user: user,
             createdAt: new Date()
         });
+    }
+
+    calculateNextBirthDay(birthday: Date, timezone: string) {
+        const today = moment.tz(timezone);
+        const birthMonth = moment(birthday).format('MM');
+        const birthDay = moment(birthday).format('DD');
+
+        // Handle leap year birthday
+        let birthMonthDay = `${birthMonth}-${birthDay}`;
+        let targetYear = today.year();
+
+        // Check if it's Feb 29 and not a leap year
+        if (birthMonth === '02' && birthDay === '29' && !moment([targetYear]).isLeapYear()) {
+            // For non-leap years, use March 1 instead
+            birthMonthDay = '03-01';
+        }
+
+        let nextBirthday = moment.tz(`${targetYear}-${birthMonthDay} 09:00`, 'YYYY-MM-DD HH:mm', timezone);
+
+        if (nextBirthday.isBefore(today)) {
+            targetYear += 1;
+
+            // Check again for leap year in next year
+            if (birthMonth === '02' && birthDay === '29' && !moment([targetYear]).isLeapYear()) {
+                birthMonthDay = '03-01';
+            }
+
+            nextBirthday = moment.tz(`${targetYear}-${birthMonthDay} 09:00`, 'YYYY-MM-DD HH:mm', timezone);
+        }
+
+        return nextBirthday.toDate();
     }
 
     async rescheduleBirthdayJob(user: UserDocument): Promise<void> {
