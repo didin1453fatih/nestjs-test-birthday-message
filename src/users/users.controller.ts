@@ -18,6 +18,11 @@ export class UsersController {
         return this.usersService.findOne(id);
       }
 
+      @Get()
+      findAll() {
+        return this.usersService.findAll();
+      }
+
       @Put(':id')
       update(@Param('id') id: string, @Body() dto: UserDto) {
         return this.usersService.update(id, dto);
