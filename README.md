@@ -1,98 +1,99 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+## Technologies Used
+1. NestJS
+2. MongoDB
+3. Docker
+4. Agenda.js
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## How to use
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
+2. Navigate to the project directory:
+   ```bash
+    cd <project-directory>
+   ```
+3. Start the application:
+   ```bash
+    docker-compose up
+   ```
+4. Access the application swagger documentation at:
+   ```
+   http://localhost:3000/docs
+   ```
+5. If you want change code, you must rebuild the app docker image:
+   ```bash
+    docker-compose build --no-cache app
+   ```
 
-## Description
+## API Examples
+0. To see the API documentation, you can visit:
+   ```
+   http://localhost:3000/docs
+   ```
+1. To get all users:
+   ```bash
+    curl -X 'GET' \
+      'http://localhost:3000/api/users' \
+      -H 'accept: */*'
+   ```
+2. Try to add a new user:
+   ```bash
+    curl -X 'POST' \
+        'http://localhost:3000/api/users' \
+        -H 'accept: */*' \
+        -H 'Content-Type: application/json' \
+        -d '{
+        "name": "Budi",
+        "email": "budi@gmail.com",
+        "birthday": "2022-09-27",
+        "timezone": "America/New_York"
+        }'
+   ```
+3. To get a user by ID:
+   ```bash
+    curl -X 'GET' \
+      'http://localhost:3000/api/users/user_id' \
+      -H 'accept: */*'
+   ```
+4. To update a user by ID:
+   ```bash
+    curl -X 'PUT' \
+      'http://localhost:3000/api/users/683898c896fa9a4176fef0fd' \
+      -H 'accept: */*' \
+      -H 'Content-Type: application/json' \
+      -d '{
+      "name": "Budi",
+      "email": "budi@gmail.com",
+      "birthday": "2022-09-27",
+      "timezone": "America/New_York"
+      }'
+   ```
+5. To delete a user by ID:
+   ```bash
+    curl -X 'DELETE' \
+      'http://localhost:3000/api/users/683898c896fa9a4176fef0fd' \
+      -H 'accept: */*'
+   ```
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Brief notes on assumptions, limitations, and design decisions.
+### Assumptions
+- MongoDB: The application assumes a running and accessible MongoDB instance, as configured by the MONGO_URI environment variable.
+- Agenda.js: The app uses Agenda.js for job scheduling, assuming the Agenda service can connect to the same MongoDB instance.
+- Docker: The app is designed to run in Docker containers, with Docker Compose orchestrating both the app and MongoDB.
+- Environment Variables: Configuration (such as DB URI and port) is managed via environment variables, loaded using @nestjs/config.
+- For local development change MONGO_URI in .env file to your local MongoDB instance.
 
-## Project setup
+### Limitations
+1. No Authentication: There is no authentication or authorization implemented for the API endpoints.
+2. Email Uniqueness: User emails must be unique, enforced at both the DTO validation and MongoDB schema level.
+3. Birthday Scheduling: The birthday job is scheduled for 9:00 AM in the user's timezone, and leap year birthdays are handled by moving to March 1st in non-leap years.
 
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Design Decisions
+1. NestJS: Chosen for its modularity, dependency injection, and strong TypeScript support.
+2. Mongoose: Used for MongoDB object modeling and schema validation.
+3. Agenda.js: Third-party library for job scheduling, allowing for flexible and persistent job management using MongoDB.
+4. Swagger: API documentation is auto-generated and available at /docs.
+5. DTO Validation: Uses class-validator for input validation, ensuring data integrity at the controller level.
+6. Dockerization: The app is containerized for easy deployment and consistent environments.
