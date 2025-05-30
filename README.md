@@ -79,8 +79,11 @@
 
 ## Brief notes on assumptions, limitations, and design decisions.
 ### Assumptions
+- The most important test case are:
+  - **agenda.service.spec.ts** for testing the Agenda service with combination of birthday, current date, and timezone.
+  - **user.dto.spec.ts** for testing the User DTO validation.
 - MongoDB: The application assumes a running and accessible MongoDB instance, as configured by the MONGO_URI environment variable.
-- Agenda.js: The app uses Agenda.js for job scheduling, assuming the Agenda service can connect to the same MongoDB instance.
+- Agenda.js: The app uses Agenda.js for job scheduling, assuming the Agenda service always connect to the same MongoDB instance. And agenda jobs who started at 9:00 AM in the user's timezone always run at that time.
 - Docker: The app is designed to run in Docker containers, with Docker Compose orchestrating both the app and MongoDB.
 - Environment Variables: Configuration (such as DB URI and port) is managed via environment variables, loaded using @nestjs/config.
 - For local development change MONGO_URI in .env file to your local MongoDB instance.
@@ -94,6 +97,6 @@
 1. NestJS: Chosen for its modularity, dependency injection, and strong TypeScript support.
 2. Mongoose: Used for MongoDB object modeling and schema validation.
 3. Agenda.js: Third-party library for job scheduling, allowing for flexible and persistent job management using MongoDB.
-4. Swagger: API documentation is auto-generated and available at /docs.
+4. Swagger: API documentation is auto-generated and available at /docs. it provides a user-friendly interface for testing API endpoints.
 5. DTO Validation: Uses class-validator for input validation, ensuring data integrity at the controller level.
 6. Dockerization: The app is containerized for easy deployment and consistent environments.
