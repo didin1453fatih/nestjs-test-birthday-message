@@ -54,13 +54,13 @@
 3. To get a user by ID:
    ```bash
     curl -X 'GET' \
-      'http://localhost:3000/api/users/user_id' \
+      'http://localhost:3000/api/users/[user_id]' \
       -H 'accept: */*'
    ```
 4. To update a user by ID:
    ```bash
     curl -X 'PUT' \
-      'http://localhost:3000/api/users/683898c896fa9a4176fef0fd' \
+      'http://localhost:3000/api/users/[user_id]' \
       -H 'accept: */*' \
       -H 'Content-Type: application/json' \
       -d '{
@@ -73,7 +73,7 @@
 5. To delete a user by ID:
    ```bash
     curl -X 'DELETE' \
-      'http://localhost:3000/api/users/683898c896fa9a4176fef0fd' \
+      'http://localhost:3000/api/users/[user_id]' \
       -H 'accept: */*'
    ```
 
