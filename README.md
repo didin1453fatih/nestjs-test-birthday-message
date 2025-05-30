@@ -8,7 +8,7 @@
 ## How to use
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/didin1453fatih/nestjs-test-birthday-message.git
    ```
 2. Navigate to the project directory:
    ```bash
