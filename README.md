@@ -57,6 +57,7 @@
       'http://localhost:3000/api/users/[user_id]' \
       -H 'accept: */*'
    ```
+   Change `[user_id]` to the actual user ID you want to retrieve.
 4. To update a user by ID:
    ```bash
     curl -X 'PUT' \
@@ -70,12 +71,14 @@
       "timezone": "America/New_York"
       }'
    ```
+    Change `[user_id]` to the actual user ID you want to update.
 5. To delete a user by ID:
    ```bash
     curl -X 'DELETE' \
       'http://localhost:3000/api/users/[user_id]' \
       -H 'accept: */*'
    ```
+    Change `[user_id]` to the actual user ID you want to delete.
 
 ## Brief notes on assumptions, limitations, and design decisions.
 ### Assumptions
